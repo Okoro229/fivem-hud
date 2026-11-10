@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atelier Norah — bijoux en argent, faits à la main</title>
+<meta name="description" content="Bijoux en argent 925 faits à la main, en petite série. Livraison offerte dès 60 €, retour gratuit sous 30 jours.">
+<meta property="og:title" content="Atelier Norah — bijoux en argent, faits à la main">
+<meta property="og:description" content="Petites séries, argent 925, fabriqué en France. Livraison offerte dès 60 €.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1200&h=630&fit=crop">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://exemple.fr/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Store","name":"Atelier Norah",
+ "description":"Bijoux en argent faits à la main en France",
+ "url":"https://exemple.fr/",
+ "priceRange":"35-180 EUR",
+ "address":{"@type":"PostalAddress","addressCountry":"FR"}}
+</script>
+<style>
+  :root {
+    --encre: #1f1b16;
+    --papier: #fbf8f3;
+    --sable: #e8dfd2;
+    --terre: #9c5b3f;
+    --gris: #6f665c;
+    --max: 1120px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--papier); color: var(--encre);
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.65; -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--terre); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .contenu { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+  header {
+    border-bottom: 1px solid var(--sable);
+    position: sticky; top: 0; background: var(--papier); z-index: 10;
+  }
+  .entete {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 0;
+  }
+  .marque { font-size: 1.35rem; letter-spacing: .06em; text-transform: uppercase; }
+  nav { display: flex; gap: 26px; font-family: system-ui, sans-serif; font-size: .92rem; }
+  nav a { color: var(--encre); }
+
+  .hero {
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px;
+    align-items: center; padding: 72px 0 64px;
+  }
+  .hero h1 { font-size: 2.6rem; line-height: 1.15; font-weight: normal; }
+  .hero p { color: var(--gris); margin: 20px 0 28px; font-size: 1.05rem; }
+  .hero img { width: 100%; height: 380px; object-fit: cover; border-radius: 2px; }
+
+  .bouton {
+    display: inline-block; background: var(--encre); color: var(--papier);
+    padding: 14px 30px; font-family: system-ui, sans-serif; font-size: .9rem;
+    letter-spacing: .04em; text-transform: uppercase; border: none;
+    cursor: pointer; transition: background .2s;
+  }
+  .bouton:hover { background: var(--terre); text-decoration: none; }
+
+  .atouts {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    padding: 28px 0; border-top: 1px solid var(--sable);
+    border-bottom: 1px solid var(--sable);
+    font-family: system-ui, sans-serif; font-size: .88rem; color: var(--gris);
+  }
+  .atouts strong { display: block; color: var(--encre); font-size: .95rem; margin-bottom: 4px; }
+
+  section { padding: 72px 0; }
+  h2 { font-size: 1.7rem; font-weight: normal; margin-bottom: 8px; }
+  .sous-titre { color: var(--gris); margin-bottom: 40px; }
+
+  .grille { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .produit img { width: 100%; height: 300px; object-fit: cover; border-radius: 2px; }
+  .produit h3 { font-size: 1.05rem; font-weight: normal; margin: 14px 0 4px; }
+  .produit .prix { font-family: system-ui, sans-serif; color: var(--gris); }
+  .produit .note { font-family: system-ui, sans-serif; font-size: .82rem; color: var(--gris); margin-top: 6px; }
+
+  .citation {
+    background: var(--sable); padding: 56px 0; text-align: center;
+  }
+  .citation blockquote {
+    max-width: 640px; margin: 0 auto; font-size: 1.3rem; font-style: italic;
+  }
+  .citation cite {
+    display: block; margin-top: 18px; font-style: normal;
+    font-family: system-ui, sans-serif; font-size: .88rem; color: var(--gris);
+  }
+
+  .faq details {
+    border-bottom: 1px solid var(--sable); padding: 18px 0;
+    font-family: system-ui, sans-serif;
+  }
+  .faq summary { cursor: pointer; font-size: 1rem; }
+  .faq p { color: var(--gris); margin-top: 10px; font-size: .94rem; }
+
+  footer {
+    background: var(--encre); color: var(--sable); padding: 48px 0 32px;
+    font-family: system-ui, sans-serif; font-size: .86rem;
+  }
+  footer .grille { gap: 40px; }
+  footer a { color: var(--sable); }
+  footer h4 { margin-bottom: 12px; font-weight: 600; }
+  .bas { margin-top: 36px; padding-top: 20px; border-top: 1px solid #3a332c; color: #9b9186; }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; padding: 44px 0; }
+    .hero img { height: 260px; }
+    .grille, .atouts { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2rem; }
+    nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="contenu entete">
+    <div class="marque">Atelier Norah</div>
+    <nav>
+      <a href="#collection">Collection</a>
+      <a href="#histoire">L'atelier</a>
+      <a href="#faq">Questions</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="contenu">
+    <div class="hero">
+      <div>
+        <h1>L'argent, travaillé à la main, en petite série.</h1>
+        <p>Chaque pièce est façonnée dans notre atelier de Lyon. Pas de production
+           de masse : quand une série est écoulée, elle ne revient pas.</p>
+        <a class="bouton" href="#collection">Voir la collection</a>
+      </div>
+      <img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=800&h=760&fit=crop"
+           alt="Bague en argent martelé posée sur un tissu clair" width="800" height="760">
+    </div>
+
+    <div class="atouts">
+      <div><strong>Argent 925 massif</strong>Aucun plaqué, aucune dorure qui s'écaille.</div>
+      <div><strong>Livraison offerte dès 60 €</strong>Expédié sous 48 h, suivi inclus.</div>
+      <div><strong>Retour gratuit 30 jours</strong>Sans justification, sans frais.</div>
+    </div>
+  </div>
+
+  <section id="collection">
+    <div class="contenu">
+      <h2>La collection</h2>
+      <p class="sous-titre">Douze pièces, toutes faites dans le même atelier.</p>
+      <div class="grille">
+        <article class="produit">
+          <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&h=600&fit=crop"
+               alt="Bague Solène en argent" width="600" height="600" loading="lazy">
+          <h3>Bague Solène</h3>
+          <div class="prix">78 €</div>
+          <div class="note">4,8/5 — 34 avis</div>
+        </article>
+        <article class="produit">
+          <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&h=600&fit=crop"
+               alt="Collier Ligne en argent" width="600" height="600" loading="lazy">
+          <h3>Collier Ligne</h3>
+          <div class="prix">96 €</div>
+          <div class="note">4,9/5 — 51 avis</div>
+        </article>
+        <article class="produit">
+          <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&h=600&fit=crop"
+               alt="Boucles Ondes en argent" width="600" height="600" loading="lazy">
+          <h3>Boucles Ondes</h3>
+          <div class="prix">64 €</div>
+          <div class="note">4,7/5 — 28 avis</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="citation" id="histoire">
+    <div class="contenu">
+      <blockquote>« J'ai commandé la bague Solène pour un anniversaire. Elle est
+        arrivée dans un écrin en lin, avec un mot écrit à la main. Ça change tout. »</blockquote>
+      <cite>Claire M. — avis vérifié du 3 octobre</cite>
+    </div>
+  </div>
+
+  <section id="faq">
+    <div class="contenu">
+      <h2>Questions fréquentes</h2>
+      <p class="sous-titre">Ce qu'on nous demande le plus souvent.</p>
+      <div class="faq">
+        <details>
+          <summary>Est-ce que l'argent noircit ?</summary>
+          <p>L'argent 925 s'oxyde légèrement avec le temps, c'est normal. Un chiffon
+             doux suffit à lui rendre son éclat. Nous fournissons un tissu de
+             polissage avec chaque commande.</p>
+        </details>
+        <details>
+          <summary>Combien de temps pour recevoir ma commande ?</summary>
+          <p>Expédition sous 48 h ouvrées, livraison en 2 à 3 jours en France.
+             Vous recevez un numéro de suivi par email.</p>
+        </details>
+        <details>
+          <summary>Puis-je faire graver une pièce ?</summary>
+          <p>Oui, sur la bague Solène et le collier Ligne. La gravure ajoute 15 €
+             et deux jours de délai. Écrivez-nous avant de commander.</p>
+        </details>
+        <details>
+          <summary>Et si la taille ne va pas ?</summary>
+          <p>Le retour est gratuit sous 30 jours. Nous refaisons la taille sans
+             frais une fois par commande.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contenu">
+      <h2>Une question avant de commander ?</h2>
+      <p class="sous-titre">Nous répondons nous-mêmes, en moins de 24 h ouvrées.</p>
+      <a class="bouton" href="mailto:bonjour@atelier-norah.fr">Écrire à l'atelier</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="contenu">
+    <div class="grille">
+      <div>
+        <h4>Atelier Norah</h4>
+        <p>14 rue des Tanneurs<br>69001 Lyon, France</p>
+      </div>
+      <div>
+        <h4>Boutique</h4>
+        <p><a href="#collection">Collection</a><br>
+           <a href="#faq">Livraison et retours</a><br>
+           <a href="#contact">Nous écrire</a></p>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <p><a href="#">Mentions légales</a><br>
+           <a href="#">Conditions générales</a><br>
+           <a href="#">Confidentialité</a></p>
+      </div>
+    </div>
+    <div class="bas">
+      © 2026 Atelier Norah — boutique de démonstration. Les produits, prix et avis
+      sont fictifs ; les images viennent d'Unsplash.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
