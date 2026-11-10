@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://okoro229.github.io/fivem-hud/sitemap.xml
