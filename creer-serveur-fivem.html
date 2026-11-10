@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creer un serveur FiveM en 2026 — Torfine</title>
+<meta name="description" content="L ordre des etapes : framework, base de donnees, carte, scripts, tests et budget. Eviter de tout recommencer.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Creer un serveur FiveM en 2026">
+<meta property="og:description" content="L ordre des etapes : framework, base de donnees, carte, scripts, tests et budget. Eviter de tout recommencer.">
+<meta property="og:url" content="https://okoro229.github.io/fivem-hud/creer-serveur-fivem.html">
+<meta property="og:site_name" content="Torfine">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://okoro229.github.io/fivem-hud/creer-serveur-fivem.html">
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --line:#30363d; --text:#e6edf3;
+          --muted:#8b949e; --accent:#f0883e; --ok:#3fb950; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text);
+         font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:760px; margin:0 auto; padding:48px 20px 80px; }
+  header { border-bottom:1px solid var(--line); padding-bottom:22px; margin-bottom:32px; }
+  h1 { font-size:30px; line-height:1.25; margin:0 0 10px; }
+  h2 { font-size:21px; margin:36px 0 14px; }
+  h3 { font-size:17px; margin:26px 0 8px; }
+  p { margin:0 0 14px; }
+  ul { padding-left:20px; } li { margin-bottom:7px; }
+  pre { background:var(--panel); border:1px solid var(--line); border-radius:8px;
+        padding:14px; overflow-x:auto; font-size:13.5px; }
+  code { background:var(--panel); border:1px solid var(--line); border-radius:5px;
+         padding:2px 5px; font-size:14px; }
+  pre code { border:0; padding:0; background:none; }
+  footer { margin-top:56px; padding-top:22px; border-top:1px solid var(--line);
+           color:var(--muted); font-size:14px; }
+  a { color:var(--accent); }
+  .btn { display:inline-block; background:var(--accent); color:#0d1117;
+         font-weight:600; text-decoration:none; padding:11px 20px;
+         border-radius:8px; margin-top:12px; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Creer un serveur FiveM en 2026",
+  "description": "L ordre des etapes : framework, base de donnees, carte, scripts, tests et budget. Eviter de tout recommencer.",
+  "datePublished": "2026-11-10",
+  "dateModified": "2026-11-10",
+  "author": {
+    "@type": "Person",
+    "name": "Torfine"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Torfine"
+  },
+  "mainEntityOfPage": "https://okoro229.github.io/fivem-hud/creer-serveur-fivem.html"
+}
+</script>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Creer un serveur FiveM en 2026</h1>
+<p style="color:var(--muted);margin:0;">Torfine — développement FiveM, QBCore · Qbox · ESX</p>
+</header>
+<h2>Créer un serveur FiveM en 2026 : l&#x27;ordre des étapes</h2>
+<p>*Par l&#x27;opérateur de Torfine, développement FiveM QBCore · Qbox · ESX.*</p>
+<p>La plupart des serveurs qui ouvrent et ferment en trois semaines ont sauté la</p>
+<p>même étape : ils ont choisi les scripts avant d&#x27;avoir choisi le framework. Voici</p>
+<p>l&#x27;ordre qui évite de tout recommencer.</p>
+<hr>
+<h2>1. Le framework, avant tout le reste</h2>
+<p>Trois choix, et ils ne se valent pas selon ce que vous voulez faire.</p>
+<p>| Framework | Forces | Faiblesses | Pour qui |</p>
+<p>|---|---|---|---|</p>
+<p>| <strong>QBCore</strong> | le plus de ressources gratuites, communauté large | code parfois daté, performances moyennes | débutant qui veut ouvrir vite |</p>
+<p>| <strong>Qbox</strong> | plus récent, plus rapide, API proche de QBCore | moins de ressources tierces | serveur qui vise 100+ joueurs |</p>
+<p>| <strong>ESX</strong> | historique, énorme base de scripts | plus lent, architecture ancienne | migration d&#x27;un serveur existant |</p>
+<p><strong>Mon conseil :</strong> Qbox si vous partez de zéro en 2026. Vous gardez l&#x27;écosystème</p>
+<p>QBCore (la plupart des scripts s&#x27;adaptent en quelques lignes) avec de meilleures</p>
+<p>performances.</p>
+<p><strong>Erreur classique :</strong> installer <code>esx_ambulancejob</code> sur un serveur Qbox parce</p>
+<p>qu&#x27;un tutoriel YouTube le montrait. Ça « marche » deux jours, puis les deux</p>
+<p>systèmes se battent pour la même base.</p>
+<hr>
+<h2>2. La base de données, ensuite</h2>
+<p>Une seule base, un seul préfixe de tables. Si vous mélangez <code>users</code> (ESX) et</p>
+<p><code>players</code> (QBCore), vous aurez deux systèmes de compte qui ne se parlent pas.</p>
+<p>Choisissez le schéma du framework et <strong>ne le modifiez pas</strong> : ajoutez des tables</p>
+<p>à côté si vous avez besoin de données supplémentaires.</p>
+<hr>
+<h2>3. La carte</h2>
+<p>Une carte de base, puis les intérieurs dont vous avez vraiment besoin. Charger</p>
+<p>tous les MLO de la terre au démarrage, c&#x27;est quatre minutes de chargement et un</p>
+<p>serveur qui perd ses joueurs avant la première scène.</p>
+<p><strong>Règle :</strong> chaque <code>.ymap</code> ajouté doit correspondre à un lieu où vos joueurs vont</p>
+<p>réellement aller.</p>
+<hr>
+<h2>4. Les scripts, par ordre de dépendance</h2>
+<p>1. <strong>Identité</strong> — personnage, apparence.</p>
+<p>2. <strong>Économie</strong> — argent propre/sale, banque.</p>
+<p>3. <strong>Véhicules</strong> — garage, concession.</p>
+<p>4. <strong>Métiers</strong> — un seul au départ, bien fait.</p>
+<p>5. <strong>Police / EMS</strong> — seulement si vous avez les joueurs pour les tenir.</p>
+<p>6. <strong>Illégal</strong> — en dernier, jamais avant que l&#x27;économie tourne.</p>
+<p>Un serveur qui ouvre avec le braquage de banque mais sans garage fonctionnel</p>
+<p>n&#x27;a rien à proposer après trois jours.</p>
+<hr>
+<h2>5. Le site et la vitrine</h2>
+<p>Un serveur sans page web n&#x27;existe pas pour Google. Trois pages suffisent :</p>
+<ul>
+<li><strong>accueil</strong> : ce qu&#x27;est le serveur, en une phrase ;</li>
+<li><strong>règles</strong> : claires, courtes, datées ;</li>
+<li><strong>rejoindre</strong> : le lien Discord, une seule fois, sans détour.</li>
+</ul>
+<p>Ne mettez pas dix liens différents vers le Discord. Un seul, visible.</p>
+<hr>
+<h2>6. Les tests, avant l&#x27;ouverture</h2>
+<ul>
+<li><strong>Charge</strong> : simulez 20 joueurs avec des bots, pas 2.</li>
+<li><strong>Économie</strong> : vérifiez qu&#x27;un joueur ne peut pas dupliquer de l&#x27;argent en</li>
+</ul>
+<p>  vendant et rachetant au même PNJ.</p>
+<ul>
+<li><strong>Permissions</strong> : un joueur normal ne doit pas pouvoir ouvrir le menu admin.</li>
+<li><strong>Crash</strong> : tuez un joueur pendant un braquage, regardez ce qui reste en base.</li>
+</ul>
+<p>Un serveur qui n&#x27;a pas testé ces quatre points les découvrira en public.</p>
+<hr>
+<h2>7. L&#x27;ordre des dépenses</h2>
+<p>| Poste | Quand | Budget réaliste |</p>
+<p>|---|---|---|</p>
+<p>| Hébergement | dès le début | 15–40 €/mois |</p>
+<p>| Nom de domaine | dès le début | 10 €/an |</p>
+<p>| Scripts | après les tests | 0 à 300 € |</p>
+<p>| Publicité | <strong>jamais avant 50 joueurs réguliers</strong> | 0 € |</p>
+<p>La publicité sur un serveur vide attire des joueurs qui partent en dix minutes.</p>
+<p>Ils ne reviennent pas, et ils le disent.</p>
+<hr>
+<h2>Ce qui fait rester les joueurs</h2>
+<p>Ce n&#x27;est ni la carte, ni les scripts, ni le nombre de voitures. C&#x27;est **une</p>
+<p>activité qu&#x27;on peut faire à deux le soir même**.</p>
+<p>Un serveur avec un seul métier bien réglé et deux joueurs qui s&#x27;amusent retient</p>
+<p>plus qu&#x27;un serveur avec trente scripts et personne pour les utiliser.</p>
+<hr>
+<p><strong>Besoin d&#x27;aide pour choisir ?</strong> Décrivez ce que vous voulez faire, je réponds</p>
+<p>avec le framework adapté et un prix ferme pour les scripts qui manquent.</p>
+<a class="btn" href="https://discord.gg/uv7tXHHrUx">Poser une question sur Discord</a>
+<footer>
+Article écrit le 10 novembre 2026. Ressources gratuites et développement sur mesure —
+<a href="./">page principale</a>.
+</footer>
+</div>
+</body>
+</html>
