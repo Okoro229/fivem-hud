@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Optimiser les scripts serveur FiveM — Torfine</title>
+<meta name="description" content="Guide technique : profilage resmon, boucles lourdes, acces base de donnees et reglages manifest pour un serveur FiveM fluide.">
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --line:#30363d; --text:#e6edf3;
+          --muted:#8b949e; --accent:#f0883e; --ok:#3fb950; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text);
+         font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:760px; margin:0 auto; padding:48px 20px 80px; }
+  header { border-bottom:1px solid var(--line); padding-bottom:22px; margin-bottom:32px; }
+  h1 { font-size:30px; line-height:1.25; margin:0 0 10px; }
+  h2 { font-size:21px; margin:36px 0 14px; }
+  h3 { font-size:17px; margin:26px 0 8px; }
+  p { margin:0 0 14px; }
+  ul { padding-left:20px; } li { margin-bottom:7px; }
+  pre { background:var(--panel); border:1px solid var(--line); border-radius:8px;
+        padding:14px; overflow-x:auto; font-size:13.5px; }
+  code { background:var(--panel); border:1px solid var(--line); border-radius:5px;
+         padding:2px 5px; font-size:14px; }
+  pre code { border:0; padding:0; background:none; }
+  footer { margin-top:56px; padding-top:22px; border-top:1px solid var(--line);
+           color:var(--muted); font-size:14px; }
+  a { color:var(--accent); }
+  .btn { display:inline-block; background:var(--accent); color:#0d1117;
+         font-weight:600; text-decoration:none; padding:11px 20px;
+         border-radius:8px; margin-top:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Optimiser les scripts serveur FiveM</h1>
+<p style="color:var(--muted);margin:0;">Torfine — développement FiveM, QBCore · Qbox · ESX</p>
+</header>
+<p><strong>Optimiser les scripts serveur FiveM : Guide technique 2026 (≈ 600 mots)</strong></p>
+<hr>
+<h3>1. Pourquoi l’optimisation côté serveur ?</h3>
+<p>FiveM exécute du Lua (et parfois du C#) sur le serveur pour gérer la logique de jeu, les bases de données et les interactions entre joueurs. Un script mal écrit peut monopoliser le thread principal, augmenter le <strong>tick‑rate</strong> et provoquer des baisses de FPS, du lag ou même des plantages. Les guides publiés en 2025‑2026 (FiveVault, RARXNetwork, Frozen‑Scripts et Pityus) s’accordent sur cinq leviers majeurs : nettoyage des ressources, amélioration des accès DB, bonnes pratiques de script, redémarrages planifiés et réglages hardware.</p>
+<hr>
+<h3>2. Profilage de base – <code>resmon</code> et les logs</h3>
+<ul>
+<li><strong><code>resmon</code></strong> (Four​ned‑Scripts, 2025) permet de visualiser le temps CPU consommé par chaque ressource.</li>
+<li>Identifiez les scripts dont le <strong>“CPU usage”</strong> dépasse 5 % du tick moyen ; ce sont les premiers candidats à l’optimisation.</li>
+</ul>
+<p>Exemple d’extraction de données :</p>
+<pre><code>
+RegisterServerEvent(&#x27;monitor:cpu&#x27;)
+AddEventHandler(&#x27;monitor:cpu&#x27;, function(resource, ms)
+    if ms &gt; 5.0 then
+        print((&#x27;Resource %s uses %.2f ms per tick&#x27;):format(resource, ms))
+    end
+end)
+</code></pre>
+<hr>
+<h3>3. Réduire les boucles lourdes</h3>
+<h3>3.1. Éviter les boucles imbriquées sur de grands tableaux</h3>
+<p>Beaucoup de lag provient de <strong><code>for i = 1, #players do for j = 1, #players do … end end</code></strong> qui s’exécute chaque tick. La solution : pré‑filtrer, limiter la portée ou remplacer par des tables de lookup.</p>
+<pre><code>
+-- Mauvais : boucle O(n²) chaque tick
+for _, p1 in ipairs(players) do
+    for _, p2 in ipairs(players) do
+        if p1 ~= p2 and #(p1.pos - p2.pos) &lt; 10.0 then
+            TriggerClientEvent(&#x27;showProximity&#x27;, p1.id, p2.id)
+        end
+    end
+end
+
+-- Optimisé : table de proximité mise à jour toutes les 2 s
+local proximityMap = {}
+
+CreateThread(function()
+    while true do
+        proximityMap = {}
+        for i = 1, #players do
+            local p1 = players[i]
+            proximityMap[p1.id] = {}
+            for j = i+1, #players do
+                local p2 = players[j]
+                if #(p1.pos - p2.pos) &lt; 10.0 then
+                    table.insert(proximityMap[p1.id], p2.id)
+                    table.insert(proximityMap[p2.id], p1.id)
+                end
+            end
+        end
+        Wait(2000)   -- 2 s au lieu de chaque tick
+    end
+end)
+
+-- Tick léger : uniquement lecture du cache
+CreateThread(function()
+    while true do
+        for id, neighbours in pairs(proximityMap) do
+            TriggerClientEvent(&#x27;showProximity&#x27;, id, neighbours)
+        end
+        Wait(0)   -- run‑once per tick
+    end
+end)
+</code></pre>
+<h3>3.2. Utiliser <code>Wait</code> (sleep) lorsque le script n’a rien à faire</h3>
+<p>Le guide de Pityus (sep 2026) recommande <strong>“sleep long when nothing is happening”</strong>. Un script qui attend un événement doit appeler <code>Wait(5000)</code> au lieu de rester actif.</p>
+<pre><code>
+CreateThread(function()
+    while true do
+        local data = MySQL.Sync.fetchAll(&#x27;SELECT * FROM vehicles WHERE parked = 0&#x27;)
+        if #data == 0 then
+            Wait(30000)   -- 30 s d’inactivité
+        else
+            ProcessVehicles(data)
+            Wait(1000)    -- 1 s entre chaque lot
+        end
+    end
+end)
+</code></pre>
+<hr>
+<h3>4. Caching des valeurs fréquentes</h3>
+<h3>4.1. Cache des fonctions natives</h3>
+<p>Les appels à <code>GetEntityCoords</code> ou <code>GetPlayerName</code> sont coûteux lorsqu’ils sont répétés dans une même boucle. Stockez le résultat dans une variable locale.</p>
+<pre><code>
+local coords = GetEntityCoords(playerPed)   -- cache local
+if #(coords - somePoint) &lt; 5.0 then
+    -- …
+end
+</code></pre>
+<h3>4.2. Cache des requêtes DB</h3>
+<p>Au lieu de lancer une requête MySQL à chaque connexion, chargez les tables essentielles au démarrage et conservez‑les en mémoire (table Lua).</p>
+<pre><code>
+local vehicleCache = {}
+
+CreateThread(function()
+    local rows = MySQL.Sync.fetchAll(&#x27;SELECT plate, owner FROM owned_vehicles&#x27;)
+    for _, row in ipairs(rows) do
+        vehicleCache[row.plate] = row.
+</code></pre>
+<a class="btn" href="https://discord.gg/uv7tXHHrUx">Poser une question sur Discord</a>
+<footer>
+Article écrit le 10 novembre 2026. Ressources gratuites et développement sur mesure —
+<a href="./">page principale</a>.
+</footer>
+</div>
+</body>
+</html>
